@@ -21,23 +21,23 @@ Results or return values will nearly always be JSONified. The keys can be found 
 PushBullet.APIKey = "<your api key here>";
 ```
 
-* [PushBullet.push](#PushBulletpush)
-* [PushBullet.pushFile](#PushBulletpushFile)
-* [PushBullet.deletePush](#PushBulletdeletePush)
-* [PushBullet.pushHistory](#PushBulletpushHistory)
-* [PushBullet.devices](#PushBulletdevices)
-* [PushBullet.deleteDevice](#PushBulletdeleteDevice)
-* [PushBullet.contacts](#PushBulletcontacts)
-* [PushBullet.deleteContact](#PushBulletdeleteContact)
-* [PushBullet.user](#PushBulletuser)
+* [PushBullet.push](#pushbulletpush)
+* [PushBullet.pushFile](#pushbulletpushfile)
+* [PushBullet.deletePush](#pushbulletdeletepush)
+* [PushBullet.pushHistory](#pushbulletpushhistory)
+* [PushBullet.devices](#pushbulletdevices)
+* [PushBullet.deleteDevice](#pushbulletdeletedevice)
+* [PushBullet.contacts](#pushbulletcontacts)
+* [PushBullet.deleteContact](#pushbulletdeletecontact)
+* [PushBullet.user](#pushbulletuser)
 
 ----------------------------
 
 ### PushBullet.push
 `PushBullet.push(pushType, devId, email, data, callback)` - pushes either a note, link, address, or list to a PushBullet device.
-* `pushType` - either `'note'`, `'link'`, `'address'`, or `'list'`. For file, use [PushBullet.pushFile](#PushBulletpushFile).
-* `devId` - the ID of the device to push to. Available device IDs can be found by using [PushBullet.devices](#PushBulletdevices). Either `devId` or `email` can be used, not both.
-* `email` - the email address of the contact to push to. Available contacts can be found with [PushBullet.contacts](#PushBulletcontacts). Either `devId` or `email` can be used, not both.
+* `pushType` - either `'note'`, `'link'`, `'address'`, or `'list'`. For file, use [PushBullet.pushFile](#pushbulletpushfile).
+* `devId` - the ID of the device to push to. Available device IDs can be found by using [PushBullet.devices](#pushbulletdevices). Either `devId` or `email` can be used, not both.
+* `email` - the email address of the contact to push to. Available contacts can be found with [PushBullet.contacts](#pushbulletcontacts). Either `devId` or `email` can be used, not both.
 * `data` - the information to push.  Expects a JSONified version of the type parameters [here](https://docs.pushbullet.com/v2/pushes).
 * `callback` - Optional callback that expects an `err` and a `res` parameter.
 
@@ -85,8 +85,8 @@ Example return value:
 ### PushBullet.pushFile
 `PushBullet.pushFile(devId, email, fileHandle, body, callback)` - Pushes a file from an HTML form element
 
-* `devId` - the ID of the device to push to. Available device IDs can be found by using [PushBullet.devices](#PushBulletdevices). Either `devId` or `email` can be used, not both.
-* `email` - the email address of the contact to push to. Available contacts can be found with [PushBullet.contacts](#PushBulletcontacts). Either `devId` or `email` can be used, not both.
+* `devId` - the ID of the device to push to. Available device IDs can be found by using [PushBullet.devices](#pushbulletdevices). Either `devId` or `email` can be used, not both.
+* `email` - the email address of the contact to push to. Available contacts can be found with [PushBullet.contacts](#pushbulletcontacts). Either `devId` or `email` can be used, not both.
 * `fileHandle` - the variable that gets returned when selecting an input of type `file`.
 * `body` - optional body to be sent with the file.
 * `callback` - Optional callback that expects an `err` and a `res` parameter.
@@ -117,7 +117,7 @@ Example return value: Check the PushBullet.push example.
 ---
 ### PushBullet.deletePush
 `PushBullet.deletePush(pushId, callback)` - Deletes a push given the ID of a push.
-* `pushId` - the ID of the push to be deleted. The ID can be found by using [PushBullet.pushHistory](#PushBulletpushHistory) or by storing the result of [PushBullet.push](#PushBulletpush) or [PushBullet.pushFile](#PushBulletpushFile).
+* `pushId` - the ID of the push to be deleted. The ID can be found by using [PushBullet.pushHistory](#pushbulletpushhistory) or by storing the result of [PushBullet.push](#pushbulletpush) or [PushBullet.pushFile](#pushbulletpushfile).
 * `callback` - Optional callback that expects an `err` and a `res` parameter
 
 Example for synchronous:
@@ -250,7 +250,7 @@ Example return value:
 ---
 ### PushBullet.deleteDevice
 `PushBullet.deleteDevice(devId, callback)` - Deletes a device given its device id.
-* `devId`. The device id can be found using [PushBullet.devices](#PushBulletdevices).
+* `devId`. The device id can be found using [PushBullet.devices](#pushbulletdevices).
 * `callback` - Optional callback that expects an `err` and a `res` parameter
 
 Example for synchronous:
@@ -332,7 +332,7 @@ Example return value:
 ---
 ### PushBullet.deleteContact
 `PushBullet.deleteDevice(contId, callback)` - Deletes a device given its device id.
-* `contId`. The contact id can be found using [PushBullet.contacts](#PushBulletcontacts).
+* `contId`. The contact id can be found using [PushBullet.contacts](#pushbulletcontacts).
 * `callback` - Optional callback that expects an `err` and a `res` parameter
 
 Example for synchronous:
