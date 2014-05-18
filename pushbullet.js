@@ -166,15 +166,15 @@ var PushBullet = (function() {
         }
     };
 
-    pb.user = function(callback) {
-        var res = ajaxReq(pbUser, "GET", null, callback);
+    pb.deleteContact = function(contId, callback) {
+        var res = ajaxReq(pbContact + "/" + contId, null, callback);
         if(!callback) {
             return res;
         }
     };
 
-    pb.deleteContact = function(contId, callback) {
-        var res = ajaxReq(pbContact + "/" + contId, null, callback);
+    pb.user = function(callback) {
+        var res = ajaxReq(pbUser, "GET", null, callback);
         if(!callback) {
             return res;
         }
