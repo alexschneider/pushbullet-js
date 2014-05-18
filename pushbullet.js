@@ -5,16 +5,36 @@ var PushBullet = (function() {
     var pbContact = pbURL + "contacts";
     var pbDevice = pbURL + "devices";
     var pbUser = pbURL + "users/me";
+    var pbUpReq = pbURL + "upload-request";
     var httpReqDone = 4;
     var httpResGood = 200;
+    var httpResNoCont = 204;
 
     pb.APIKey = null;
 
-    pb.push = function(pushType, devId, data, callback) {
+    pb.push = function(pushType, devId, email, data, callback) {
         var parameters = {
-            device_iden: devId,
             type: pushType.toLowerCase()
         };
+        if(email && devId) {
+            var err = new Error("Cannot push to both device and contact");
+            if(callback) {
+                return callback(err);
+            } else {
+                throw err;
+            }
+        } else if(email) {
+            parameters.email = email;
+        } else if(devId) {
+            parameters.device_iden = devId;
+        } else {
+            var err = new Error("Must push to either device or contact");
+            if(callback) {
+                return callback(err);
+            } else {
+                throw err;
+            }
+        }
         switch(pushType.toLowerCase()) {
         case "note":
             parameters.title = data.title;
@@ -36,10 +56,11 @@ var PushBullet = (function() {
             parameters.items = data.items;
             break;
         default:
+            var err = new Error("Invalid type");
             if(callback) {
-                return callback(new Error("Invalid type"));
+                return callback(err);
             } else {
-                throw new Error("Invalid type");
+                throw err;
             }
             break;
         }
@@ -47,32 +68,106 @@ var PushBullet = (function() {
         if(!callback) {
             return res;
         }
-    }
+    };
+
+    pb.pushFile = function(devId, email, fileHandle, body, callback) {
+        var type = "file_type=" + encodeURIComponent(fileHandle.type);
+        var name = "file_name=" + encodeURIComponent(fileHandle.name);
+        var upReqURL = pbUpReq + "?" + type + name;
+        var upReqFunc = !callback ? null : function(err, res) {
+            if(err) {
+                return callback(err);
+            } else {
+                try {
+                    doPushFile(res, devId, email, fileHandle, body, callback);
+                } catch(err) {
+                    return callback(err);
+                }
+            }
+        };
+        var res = ajaxReq(upReqURL, "GET", null, upReqFunc);
+        if(!callback) {
+            return doPushFile(res, fileHandle);
+        }
+    };
+
+    var doPushFile = function(ajax, devId, email, fileHandle, body, callback) {
+        var fileInfo = new FormData();
+        fileInfo.append("awsaccesskeyid", ajax.data.awsaccesskeyid);
+        fileInfo.append("acl", ajax.data.acl);
+        fileInfo.append("key", ajax.data.key);
+        fileInfo.append("signature", ajax.data.signature);
+        fileInfo.append("policy", ajax.data.policy);
+        fileInfo.append("content_type", ajax.data.content_type);
+        fileInfo.append("file", fileHandle);
+        ajaxReq(ajax.upload_url, "POST", fileInfo, null);
+        var parameters = {
+            file_name: fileHandle.name,
+            file_type: fileHandle.type,
+            file_url: ajax.file_url,
+            type: "file"
+        };
+        if(email && devId) {
+            var err = new Error("Cannot push to both device and contact");
+            if(callback) {
+                return callback(err);
+            } else {
+                throw err;
+            }
+        } else if(email) {
+            parameters.email = email;
+        } else if(devId) {
+            parameters.device_iden = devId;
+        } else {
+            var err = new Error("Must push to either device or contact");
+            if(callback) {
+                return callback(err);
+            } else {
+                throw err;
+            }
+        }
+        var res = ajaxReq(pbPush, "POST", parameters, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
+    pb.pushHistory = function(callback) {
+        var res = ajaxReq(pbPush, "GET", null, callback);
+        if(!callback) {
+            return res;
+        }
+    };
 
     pb.devices = function(callback) {
         var res = ajaxReq(pbDevice, "GET", null, callback);
         if(!callback) {
             return res;
         }
-    }
+    };
 
     pb.contacts = function(callback) {
         var res = ajaxReq(pbContact, "GET", null, callback);
         if(!callback) {
             return res;
         }
-    }
+    };
 
     pb.user = function(callback) {
         var res = ajaxReq(pbUser, "GET", null, callback);
         if(!callback) {
             return res;
         }
-    }
+    };
 
     var ajaxReq = function(url, verb, parameters, callback) {
         if(!pb.APIKey) {
-            throw new Error("API Key for Pushbullet not set");
+            var err = new Error("API Key for Pushbullet not set");
+            if(callback) {
+                return callback(err);
+            } else {
+                throw err;
+            }
         } else {
             var ajax = new XMLHttpRequest();
             var async = false;
@@ -97,14 +192,14 @@ var PushBullet = (function() {
                 return handleResponse(ajax)
             }
         }
-    }
+    };
 
     var handleResponse = function(ajax) {
-        if(ajax.status !== httpResGood) {
+        if(ajax.status !== httpResGood && ajax.status !== httpResNoCont) {
             throw new Error(ajax.status);
         }
         return ajax.response;
-    }
+    };
 
     return pb;
 }());
