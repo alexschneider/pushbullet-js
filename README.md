@@ -12,6 +12,12 @@ Results or return values will nearly always be JSONified. The keys can be found 
 
 **NOTE**: This is licensed under the GPL. If that does not work, feel free to contact me and I'm sure we can work something out. If this code is used, I would appreciate if you let me know, and if possible, contributing any improvements that you made via a pull request.
 
+Include this library by inserting the following before your code in the HTML (or by your other favorite way of loading scripts)
+
+```html
+<script src="http://alexschneider.github.io/pushbullet-js/pushbullet.min.js" type="text/javascript"></script>
+```
+
 ------------------------------------
 
 ##Methods Exposed by this Wrapper
@@ -159,6 +165,7 @@ Example for synchronous:
 var res = PushBullet.pushHistory();
 console.log(res);
 ```
+[JSFiddle](http://jsfiddle.net/PJ7L5/)
 
 Example for asynchronous:
 
@@ -171,6 +178,7 @@ PushBullet.pushHistory(function(err, res) {
     }
 });
 ```
+[JSFiddle](http://jsfiddle.net/GYA4X/)
 
 Example return value:
 
@@ -211,6 +219,7 @@ Example for synchronous:
 var res = PushBullet.devices();
 console.log(res);
 ```
+[JSFiddle](http://jsfiddle.net/4zdST/)
 
 Example for asynchronous:
 
@@ -223,6 +232,7 @@ PushBullet.devices(function(err, res) {
     }
 });
 ```
+[JSFiddle](http://jsfiddle.net/mF78D/)
 
 Example return value:
 
