@@ -48,7 +48,7 @@ var PushBullet = (function() {
             break;
         case "address":
             parameters.append("name", data.name);
-            parameters.append("address", data.address;
+            parameters.append("address", data.address);
             break;
         case "list":
             parameters.append("title", data.title);
@@ -131,6 +131,13 @@ var PushBullet = (function() {
         }
     };
 
+    pb.deletePush = function(pushId, callback) {
+        var res = ajaxReq(pbPush + "/" + pushId, "DELETE", null, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
     pb.pushHistory = function(callback) {
         var res = ajaxReq(pbPush, "GET", null, callback);
         if(!callback) {
@@ -145,6 +152,13 @@ var PushBullet = (function() {
         }
     };
 
+    pb.deleteDevice = function(devId, callback) {
+        var res = ajaxReq(pbDevice + "/" + devId, "DELETE", null, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
     pb.contacts = function(callback) {
         var res = ajaxReq(pbContact, "GET", null, callback);
         if(!callback) {
@@ -154,6 +168,13 @@ var PushBullet = (function() {
 
     pb.user = function(callback) {
         var res = ajaxReq(pbUser, "GET", null, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
+    pb.deleteContact = function(contId, callback) {
+        var res = ajaxReq(pbContact + "/" + contId, null, callback);
         if(!callback) {
             return res;
         }
@@ -182,13 +203,13 @@ var PushBullet = (function() {
                         }
                         return callback(null, res);
                     }
-                }
+                };
             }
             ajax.open(verb, url, async);
             ajax.setRequestHeader("Authorization", "Basic " + window.btoa(pb.APIKey + ":"));
             ajax.send(parameters);
             if(!async) {
-                return handleResponse(ajax)
+                return handleResponse(ajax);
             }
         }
     };
