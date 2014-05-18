@@ -13,9 +13,8 @@ var PushBullet = (function() {
     pb.APIKey = null;
 
     pb.push = function(pushType, devId, email, data, callback) {
-        var parameters = {
-            type: pushType.toLowerCase()
-        };
+        var parameters = new FormData();
+        parameters.append(pushType.toLowerCase());
         if(email && devId) {
             var err = new Error("Cannot push to both device and contact");
             if(callback) {
@@ -24,9 +23,9 @@ var PushBullet = (function() {
                 throw err;
             }
         } else if(email) {
-            parameters.email = email;
+            parameters.append("email", email);
         } else if(devId) {
-            parameters.device_iden = devId;
+            parameters.append("device_iden", devId);
         } else {
             var err = new Error("Must push to either device or contact");
             if(callback) {
@@ -37,23 +36,23 @@ var PushBullet = (function() {
         }
         switch(pushType.toLowerCase()) {
         case "note":
-            parameters.title = data.title;
-            parameters.body = data.body;
+            parameters.append("title", data.title);
+            parameters.append("body", data.body);
             break;
         case "link":
-            parameters.title = data.title;
-            parameters.url = data.url;
+            parameters.append("title", data.title);
+            parameters.append("url", data.url);
             if(data.body) {
-                paramaters.body = data.body;
+                paramaters.append("body", data.body);
             }
             break;
         case "address":
-            parameters.name = data.name;
-            parameters.address = data.address;
+            parameters.append("name", data.name);
+            parameters.append("address", data.address;
             break;
         case "list":
-            parameters.title = data.title;
-            parameters.items = data.items;
+            parameters.append("title", data.title);
+            parameters.append("items", data.items);
             break;
         default:
             var err = new Error("Invalid type");
@@ -73,7 +72,7 @@ var PushBullet = (function() {
     pb.pushFile = function(devId, email, fileHandle, body, callback) {
         var type = "file_type=" + encodeURIComponent(fileHandle.type);
         var name = "file_name=" + encodeURIComponent(fileHandle.name);
-        var upReqURL = pbUpReq + "?" + type + name;
+        var upReqURL = pbUpReq + "?" + type + "&" + name;
         var upReqFunc = !callback ? null : function(err, res) {
             if(err) {
                 return callback(err);
@@ -101,12 +100,12 @@ var PushBullet = (function() {
         fileInfo.append("content_type", ajax.data.content_type);
         fileInfo.append("file", fileHandle);
         ajaxReq(ajax.upload_url, "POST", fileInfo, null);
-        var parameters = {
-            file_name: fileHandle.name,
-            file_type: fileHandle.type,
-            file_url: ajax.file_url,
-            type: "file"
-        };
+        var parameters = new FormData();
+        parameters.append("file_name", fileHandle.name);
+        parameters.append("file_type", fileHandle.type);
+        parameters.append("file_url", ajax.file_url);
+        parameters.append("type", "file");
+
         if(email && devId) {
             var err = new Error("Cannot push to both device and contact");
             if(callback) {
@@ -115,9 +114,9 @@ var PushBullet = (function() {
                 throw err;
             }
         } else if(email) {
-            parameters.email = email;
+            parameters.append("email", email);
         } else if(devId) {
-            parameters.device_iden = devId;
+            parameters.append("device_iden", devId);
         } else {
             var err = new Error("Must push to either device or contact");
             if(callback) {
@@ -198,7 +197,12 @@ var PushBullet = (function() {
         if(ajax.status !== httpResGood && ajax.status !== httpResNoCont) {
             throw new Error(ajax.status);
         }
-        return ajax.response;
+        var res;
+        try {
+            return JSON.parse(ajax.response);
+        } catch(err) {
+            return ajax.response;
+        }
     };
 
     return pb;
