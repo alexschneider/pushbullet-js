@@ -54,6 +54,8 @@ var res = PushBullet.push("note", "<your device here", null, {title: "<your titl
 console.log(res);
 ```
 
+[JSFiddle](http://jsfiddle.net/LE6ZM/)
+
 Example for asynchronous:
 
 ```javascript
@@ -65,6 +67,8 @@ PushBullet.push("link", null, "<your friend's email here>", {title: "<your title
     }
 });
 ```
+
+[JSFiddle](http://jsfiddle.net/4fFhF/)
 
 Example return value:
 ```javascript
@@ -97,6 +101,8 @@ Example return value:
 * `body` - optional body to be sent with the file.
 * `callback` - Optional callback that expects an `err` and a `res` parameter.
 
+**NOTE**: Because of the large amount of data being transmitted and the fact that doing this synchronously will freeze up the entire web page, asynchronous is strongly recommended. 
+
 Example for synchronous:
 
 ```javascript
@@ -104,6 +110,8 @@ var file = document.getElementById('files')[0];
 var res = PushBullet.pushFile("<your device id here>", null, "<optional message here>");
 console.log(res);
 ```
+
+[JSFiddle](http://jsfiddle.net/8QNYc/)
 
 Example for asynchronous:
 
@@ -117,6 +125,8 @@ PushBullet.pushFile("<your device id here>", null, "<optional message here>", fu
     }
 });
 ```
+
+[JSFiddle](http://jsfiddle.net/AjFHG/)
 
 Example return value: Check the PushBullet.push example.
 
