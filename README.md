@@ -54,6 +54,8 @@ var res = PushBullet.push("note", "<your device here", null, {title: "<your titl
 console.log(res);
 ```
 
+[JSFiddle](http://jsfiddle.net/LE6ZM/)
+
 Example for asynchronous:
 
 ```javascript
