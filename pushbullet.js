@@ -43,7 +43,7 @@ var PushBullet = (function() {
             parameters.append("title", data.title);
             parameters.append("url", data.url);
             if(data.body) {
-                paramaters.append("body", data.body);
+                parameters.append("body", data.body);
             }
             break;
         case "address":
@@ -63,7 +63,7 @@ var PushBullet = (function() {
             }
             break;
         }
-        var res = ajaxReq(pbPush, "POST", parameters, callback);
+        var res = ajaxReq(pbPush, "POST", parameters, false, callback);
         if(!callback) {
             return res;
         }
@@ -84,7 +84,7 @@ var PushBullet = (function() {
                 }
             }
         };
-        var res = ajaxReq(upReqURL, "GET", null, upReqFunc);
+        var res = ajaxReq(upReqURL, "GET", null, false, upReqFunc);
         if(!callback) {
             return doPushFile(res, fileHandle);
         }
@@ -97,9 +97,9 @@ var PushBullet = (function() {
         fileInfo.append("key", ajax.data.key);
         fileInfo.append("signature", ajax.data.signature);
         fileInfo.append("policy", ajax.data.policy);
-        fileInfo.append("content_type", ajax.data.content_type);
+        fileInfo.append("content-type", fileHandle.type);
         fileInfo.append("file", fileHandle);
-        ajaxReq(ajax.upload_url, "POST", fileInfo, null);
+        ajaxReq(ajax.upload_url, "POST", fileInfo, true, null);
         var parameters = new FormData();
         parameters.append("file_name", fileHandle.name);
         parameters.append("file_type", fileHandle.type);
@@ -125,62 +125,62 @@ var PushBullet = (function() {
                 throw err;
             }
         }
-        var res = ajaxReq(pbPush, "POST", parameters, callback);
+        var res = ajaxReq(pbPush, "POST", parameters, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.deletePush = function(pushId, callback) {
-        var res = ajaxReq(pbPush + "/" + pushId, "DELETE", null, callback);
+        var res = ajaxReq(pbPush + "/" + pushId, "DELETE", null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.pushHistory = function(callback) {
-        var res = ajaxReq(pbPush, "GET", null, callback);
+        var res = ajaxReq(pbPush, "GET", null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.devices = function(callback) {
-        var res = ajaxReq(pbDevice, "GET", null, callback);
+        var res = ajaxReq(pbDevice, "GET", null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.deleteDevice = function(devId, callback) {
-        var res = ajaxReq(pbDevice + "/" + devId, "DELETE", null, callback);
+        var res = ajaxReq(pbDevice + "/" + devId, "DELETE", null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.contacts = function(callback) {
-        var res = ajaxReq(pbContact, "GET", null, callback);
+        var res = ajaxReq(pbContact, "GET", null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.deleteContact = function(contId, callback) {
-        var res = ajaxReq(pbContact + "/" + contId, null, callback);
+        var res = ajaxReq(pbContact + "/" + contId, null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
     pb.user = function(callback) {
-        var res = ajaxReq(pbUser, "GET", null, callback);
+        var res = ajaxReq(pbUser, "GET", null, false, callback);
         if(!callback) {
             return res;
         }
     };
 
-    var ajaxReq = function(url, verb, parameters, callback) {
+    var ajaxReq = function(url, verb, parameters, fileUpload, callback) {
         if(!pb.APIKey) {
             var err = new Error("API Key for Pushbullet not set");
             if(callback) {
@@ -206,7 +206,9 @@ var PushBullet = (function() {
                 };
             }
             ajax.open(verb, url, async);
-            ajax.setRequestHeader("Authorization", "Basic " + window.btoa(pb.APIKey + ":"));
+            if(!fileUpload) {
+                ajax.setRequestHeader("Authorization", "Basic " + window.btoa(pb.APIKey + ":"));
+            }
             ajax.send(parameters);
             if(!async) {
                 return handleResponse(ajax);
@@ -216,9 +218,8 @@ var PushBullet = (function() {
 
     var handleResponse = function(ajax) {
         if(ajax.status !== httpResGood && ajax.status !== httpResNoCont) {
-            throw new Error(ajax.status);
+            throw new Error(ajax.status + ": " + ajax.response);
         }
-        var res;
         try {
             return JSON.parse(ajax.response);
         } catch(err) {
