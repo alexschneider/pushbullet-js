@@ -13,8 +13,7 @@ var PushBullet = (function() {
     pb.APIKey = null;
 
     pb.push = function(pushType, devId, email, data, callback) {
-        var parameters = new FormData();
-        parameters.append(pushType.toLowerCase());
+        var parameters = {type: pushType.toLowerCase()};
         if(email && devId) {
             var err = new Error("Cannot push to both device and contact");
             if(callback) {
@@ -23,9 +22,9 @@ var PushBullet = (function() {
                 throw err;
             }
         } else if(email) {
-            parameters.append("email", email);
+            parameters.email = email;
         } else if(devId) {
-            parameters.append("device_iden", devId);
+            parameters.device_iden = devId;
         } else {
             var err = new Error("Must push to either device or contact");
             if(callback) {
@@ -36,23 +35,23 @@ var PushBullet = (function() {
         }
         switch(pushType.toLowerCase()) {
         case "note":
-            parameters.append("title", data.title);
-            parameters.append("body", data.body);
+            parameters.title = data.title;
+            parameters.body = data.body;
             break;
         case "link":
-            parameters.append("title", data.title);
-            parameters.append("url", data.url);
+            parameters.title = data.title;
+            parameters.url = data.url;
             if(data.body) {
-                parameters.append("body", data.body);
+                parameters.body = data.body;
             }
             break;
         case "address":
-            parameters.append("name", data.name);
-            parameters.append("address", data.address);
+            parameters.name = data.name;
+            parameters.address = data.address;
             break;
         case "list":
-            parameters.append("title", data.title);
-            parameters.append("items", data.items);
+            parameters.title = data.title;
+            parameters.items = data.items;
             break;
         default:
             var err = new Error("Invalid type");
@@ -86,7 +85,7 @@ var PushBullet = (function() {
         };
         var res = ajaxReq(upReqURL, "GET", null, false, upReqFunc);
         if(!callback) {
-            return doPushFile(res, fileHandle);
+            return doPushFile(res, devId, email, fileHandle, body);
         }
     };
 
@@ -100,13 +99,14 @@ var PushBullet = (function() {
         fileInfo.append("content-type", fileHandle.type);
         fileInfo.append("file", fileHandle);
         ajaxReq(ajax.upload_url, "POST", fileInfo, true, null);
-        var parameters = new FormData();
-        parameters.append("file_name", fileHandle.name);
-        parameters.append("file_type", fileHandle.type);
-        parameters.append("file_url", ajax.file_url);
-        parameters.append("type", "file");
+        var parameters = {
+            file_name: fileHandle.name,
+            file_type: fileHandle.type,
+            file_url: ajax.file_url,
+            type: "file"
+        };
         if(body) {
-            parameters.append("body", body);
+            parameters.body = body;
         }
 
         if(email && devId) {
@@ -117,9 +117,9 @@ var PushBullet = (function() {
                 throw err;
             }
         } else if(email) {
-            parameters.append("email", email);
+            parameters.email = email;
         } else if(devId) {
-            parameters.append("device_iden", devId);
+            parameters.device_iden = devId;
         } else {
             var err = new Error("Must push to either device or contact");
             if(callback) {
@@ -211,6 +211,8 @@ var PushBullet = (function() {
             ajax.open(verb, url, async);
             if(!fileUpload) {
                 ajax.setRequestHeader("Authorization", "Basic " + window.btoa(pb.APIKey + ":"));
+                ajax.setRequestHeader("Content-Type", "application/json");
+                parameters = JSON.stringify(parameters);
             }
             ajax.send(parameters);
             if(!async) {
