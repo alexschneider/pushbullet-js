@@ -105,6 +105,9 @@ var PushBullet = (function() {
         parameters.append("file_type", fileHandle.type);
         parameters.append("file_url", ajax.file_url);
         parameters.append("type", "file");
+        if(body) {
+            parameters.append("body", body);
+        }
 
         if(email && devId) {
             var err = new Error("Cannot push to both device and contact");
