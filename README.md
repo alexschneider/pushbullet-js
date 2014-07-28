@@ -47,6 +47,8 @@ PushBullet.APIKey = "<your api key here>";
 * `data` - the information to push.  Expects a JSONified version of the type parameters [here](https://docs.pushbullet.com/v2/pushes).
 * `callback` - Optional callback that expects an `err` and a `res` parameter.
 
+If neither `devId` nor `email` are supplied, all devices will be pushed to. 
+
 Example for synchronous:
 
 ```javascript
@@ -101,7 +103,7 @@ Example return value:
 * `body` - optional body to be sent with the file.
 * `callback` - Optional callback that expects an `err` and a `res` parameter.
 
-**NOTE**: Because of the large amount of data being transmitted and the fact that doing this synchronously will freeze up the entire web page, asynchronous is strongly recommended. 
+**NOTE**: Because of the large amount of data being transmitted and the fact that doing this synchronously will freeze up the entire web page, asynchronous is strongly recommended.
 
 Example for synchronous:
 
