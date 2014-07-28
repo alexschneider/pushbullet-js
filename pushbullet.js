@@ -25,13 +25,6 @@ var PushBullet = (function() {
             parameters.email = email;
         } else if(devId) {
             parameters.device_iden = devId;
-        } else {
-            var err = new Error("Must push to either device or contact");
-            if(callback) {
-                return callback(err);
-            } else {
-                throw err;
-            }
         }
         switch(pushType.toLowerCase()) {
         case "note":
