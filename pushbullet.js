@@ -207,7 +207,13 @@ var PushBullet = (function() {
                 ajax.setRequestHeader("Content-Type", "application/json");
                 parameters = JSON.stringify(parameters);
             }
-            ajax.send(parameters);
+
+						if (parameters != 'null') {
+							ajax.send(parameters);
+						} else {
+							ajax.send();
+						}
+
             if(!async) {
                 return handleResponse(ajax);
             }
