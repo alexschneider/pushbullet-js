@@ -168,8 +168,10 @@ Example return value:
 ```
 ---
 ### PushBullet.pushHistory
-`PushBullet.pushHistory(callback)` - Retrieves all the pushes that have been made to PushBullet
-* callback - Optional callback that expects an `err` and a `res` parameter.
+`PushBullet.pushHistory(callback, modified_after, cursor)` - Retrieves all the pushes that have been made to PushBullet (max 500)
+* `callback` - Optional callback that expects an `err` and a `res` parameter.
+* `modified_after` - Optional callback that expects a unix timestamp to get pushes after this date
+* `cursor` - Optional callback that expects the cursor value from previous request
 
 Example for synchronous:
 
