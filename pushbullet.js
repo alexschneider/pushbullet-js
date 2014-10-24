@@ -134,8 +134,18 @@ var PushBullet = (function() {
         }
     };
 
-    pb.pushHistory = function(callback) {
-        var res = ajaxReq(pbPush, "GET", null, false, callback);
+    pb.pushHistory = function(callback, modified_after, cursor) {
+		var url = pbPush;
+
+		if (typeof modified_after !== "undefined") {
+			url = updateQueryStringParameter(url, "modified_after", modified_after);
+		}
+
+		if (typeof cursor !== "undefined") {
+			url = updateQueryStringParameter(url, "cursor", cursor);
+		}
+
+        var res = ajaxReq(url, "GET", null, false, callback);
         if(!callback) {
             return res;
         }
@@ -175,6 +185,17 @@ var PushBullet = (function() {
             return res;
         }
     };
+
+	var updateQueryStringParameter = function (uri, key, value) {
+	  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+	  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+	  if (uri.match(re)) {
+		return uri.replace(re, '$1' + key + "=" + value + '$2');
+	  }
+	  else {
+		return uri + separator + key + "=" + value;
+	  }
+	}
 
     var ajaxReq = function(url, verb, parameters, fileUpload, callback) {
         if(!pb.APIKey) {
