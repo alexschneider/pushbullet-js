@@ -47,7 +47,7 @@ PushBullet.APIKey = "<your api key here>";
 * `data` - the information to push.  Expects a JSONified version of the type parameters [here](https://docs.pushbullet.com/v2/pushes).
 * `callback` - Optional callback that expects an `err` and a `res` parameter.
 
-If neither `devId` nor `email` are supplied, all devices will be pushed to. 
+If neither `devId` nor `email` are supplied, all devices will be pushed to.
 
 Example for synchronous:
 
@@ -169,6 +169,8 @@ Example return value:
 ---
 ### PushBullet.pushHistory
 `PushBullet.pushHistory(callback)` - Retrieves all the pushes that have been made to PushBullet
+* modifiedAfter - Optional parameter for the unixtime lower bound to look for (upper bound being Date.now())
+* Cursor - optional [cursor](https://docs.pushbullet.com/http). Check to see if your response contains the `cursor` key, and if it does, supply this. 
 * callback - Optional callback that expects an `err` and a `res` parameter.
 
 Example for synchronous:

@@ -71,8 +71,8 @@ var PushBullet = (function() {
             } else {
                 try {
                     doPushFile(res, devId, email, fileHandle, body, callback);
-                } catch(err) {
-                    return callback(err);
+                } catch(err2) {
+                    return callback(err2);
                 }
             }
         };
@@ -114,11 +114,11 @@ var PushBullet = (function() {
         } else if(devId) {
             parameters.device_iden = devId;
         } else {
-            var err = new Error("Must push to either device or contact");
+            var err2 = new Error("Must push to either device or contact");
             if(callback) {
-                return callback(err);
+                return callback(err2);
             } else {
-                throw err;
+                throw err2;
             }
         }
         var res = ajaxReq(pbPush, "POST", parameters, false, callback);
@@ -134,8 +134,25 @@ var PushBullet = (function() {
         }
     };
 
-    pb.pushHistory = function(callback) {
-        var res = ajaxReq(pbPush, "GET", null, false, callback);
+    pb.pushHistory = function(modifiedAfter, cursor, callback) {
+        if(typeof modifiedAfter === 'function') {
+            callback = modifiedAfter;
+            modifiedAfter = null;
+        } else if (typeof cursor === 'function') {
+            callback = cursor;
+            cursor = null;
+        }
+        var parameters = null;
+        if(modifiedAfter) {
+            parameters = {
+                modified_after: modifiedAfter
+            };
+        }
+        if(cursor) {
+            parameters = parameters || {};
+            parameters.cursor = cursor;
+        }
+        var res = ajaxReq(pbPush, "GET", parameters, false, callback);
         if(!callback) {
             return res;
         }
