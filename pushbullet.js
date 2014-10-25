@@ -218,6 +218,15 @@ var PushBullet = (function() {
                     }
                 };
             }
+            if(verb === "GET") {
+                var queryParams = [];
+                for(var key in parameters) {
+                    queryParams.push(key + '=' + parameters[key]);
+                }
+                var queryString = queryParams.join("&");
+                url += "?" + queryString;
+                parameters = null;
+            }
             ajax.open(verb, url, async);
             if(!fileUpload) {
                 ajax.setRequestHeader("Authorization", "Basic " + window.btoa(pb.APIKey + ":"));
