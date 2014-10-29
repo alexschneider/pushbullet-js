@@ -412,7 +412,7 @@ Example return value:
 ```
 ---
 ### PushBullet.deleteContact
-`PushBullet.deleteDevice(contId, callback)` - Deletes a device given its device id.
+`PushBullet.deleteDevice(contId, callback)` - Deletes a contact given its contact id.
 * `contId`. The contact id can be found using [PushBullet.contacts](#pushbulletcontacts).
 * `callback` - Optional callback that expects an `err` and a `res` parameter
 
