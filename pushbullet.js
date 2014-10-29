@@ -197,6 +197,16 @@ var PushBullet = (function() {
         }
     };
 
+    pb.updateContact = function(contID, newName, callback) {
+        var parameters = {
+            name: newName,
+        };
+        var res = ajaxReq(pbContact + "/" + contID, "POST", parameters, false, callback);
+        if (!callback) {
+            return res;
+        }
+    };
+
     pb.user = function(callback) {
         var res = ajaxReq(pbUser, "GET", null, false, callback);
         if(!callback) {
