@@ -30,6 +30,7 @@ PushBullet.APIKey = "<your api key here>";
 * [PushBullet.push](#pushbulletpush)
 * [PushBullet.pushFile](#pushbulletpushfile)
 * [PushBullet.deletePush](#pushbulletdeletepush)
+* [PushBullet.updatePush](#pushbulletupdatepush)
 * [PushBullet.pushHistory](#pushbulletpushhistory)
 * [PushBullet.devices](#pushbulletdevices)
 * [PushBullet.deleteDevice](#pushbulletdeletedevice)
@@ -167,10 +168,66 @@ Example return value:
 {}
 ```
 ---
+### PushBullet.updatePush
+`PushBullet.updatePush(pushId, items, dismissed, callback)` - Updates a push given the ID of a push.
+* `pushId` - the ID of the push to be updated. The ID can be found by using [PushBullet.pushHistory](#pushbulletpushhistory) or by storing the result of [PushBullet.push](#pushbulletpush) or [PushBullet.pushFile](#pushbulletpushfile).
+* `callback` - Optional callback that expects an `err` and a `res` parameter
+
+Example for synchronous:
+
+```javascript
+//Update only dismissed state
+var pushId = PushBullet.pushHistory().pushes[0].iden;
+var res = PushBullet.updatePush(pushId, null, true);
+console.log(res);
+//Update the items of the push
+var newItems = [{"checked": true, "text": "MyItem"}];
+var res = PushBullet.updatePush(pushId, newItems, null);
+console.log(res);
+```
+
+Example for asynchronous
+
+```javascript
+PushBullet.pushHistory(function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        var pushId = res.pushes[0].iden;
+        PushBullet.updatePush(pushId, null, true, function(err2, res2) {
+            console.log(res2);
+        });
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    active: true
+    created: 1414615007.3126001
+    dismissed: true
+    iden: "ujxJoYvihTUsjAgl0jaS0tM"
+    modified: 1414618011.7792873
+    receiver_email: "asd@gmail.com"
+    receiver_email_normalized: "asd@gmail.com"
+    receiver_iden: "ujvdRs19NJD2"
+    sender_email: "qwe@gmail.com"
+    sender_email_normalized: "qwe@gmail.com"
+    sender_iden: "ujxJoYviwhTU"
+    sender_name: "Furkan Üzümcü"
+    title: "Neil Patrick Harris and David Burtka on ‘American Horror Story: Freak Show’ | TVLine"
+    type: "link"
+    url: "http://tvline.com/2014/10/29/neil-patrick-harris-david-burtka-american-horror-story-freak-show/"
+}
+```
+
+---
 ### PushBullet.pushHistory
 `PushBullet.pushHistory(callback)` - Retrieves all the pushes that have been made to PushBullet
 * modifiedAfter - Optional parameter for the unixtime lower bound to look for (upper bound being Date.now())
-* Cursor - optional [cursor](https://docs.pushbullet.com/http). Check to see if your response contains the `cursor` key, and if it does, supply this. 
+* Cursor - optional [cursor](https://docs.pushbullet.com/http). Check to see if your response contains the `cursor` key, and if it does, supply this.
 * callback - Optional callback that expects an `err` and a `res` parameter.
 
 Example for synchronous:
