@@ -169,7 +169,7 @@ Example return value:
 ```
 ---
 ### PushBullet.updatePush
-`PushBullet.updatePush(pushId, items, dismissed, callback)` - Updates a push given the ID of a push.
+`PushBullet.updatePush(pushId, items, dismissed, callback)` - Updates a push given the ID of a push. You can only update dismissed value and items of a push.
 * `pushId` - the ID of the push to be updated. The ID can be found by using [PushBullet.pushHistory](#pushbulletpushhistory) or by storing the result of [PushBullet.push](#pushbulletpush) or [PushBullet.pushFile](#pushbulletpushfile).
 * `callback` - Optional callback that expects an `err` and a `res` parameter
 
