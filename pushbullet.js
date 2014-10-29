@@ -134,6 +134,17 @@ var PushBullet = (function() {
         }
     };
 
+    pb.updatePush = function(pushId, items, dismissed, callback) {
+        var parameters = {
+            items : items,
+            dismissed : dismissed
+        };
+        var res = ajaxReq(pbPush + "/" + pushId, "POST", parameters, false, callback);
+        if (!callback) {
+            return res;
+        }
+    };
+
     pb.pushHistory = function(modifiedAfter, cursor, callback) {
         if(typeof modifiedAfter === 'function') {
             callback = modifiedAfter;
@@ -172,6 +183,16 @@ var PushBullet = (function() {
         }
     };
 
+    pb.updateDevice = function(devId, newNickname, callback) {
+        var parameters = {
+            nickname: newNickname,
+        };
+        var res = ajaxReq(pbDevice + "/" + devId, "POST", parameters, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
     pb.contacts = function(callback) {
         var res = ajaxReq(pbContact, "GET", null, false, callback);
         if(!callback) {
@@ -182,6 +203,16 @@ var PushBullet = (function() {
     pb.deleteContact = function(contId, callback) {
         var res = ajaxReq(pbContact + "/" + contId, null, false, callback);
         if(!callback) {
+            return res;
+        }
+    };
+
+    pb.updateContact = function(contID, newName, callback) {
+        var parameters = {
+            name: newName,
+        };
+        var res = ajaxReq(pbContact + "/" + contID, "POST", parameters, false, callback);
+        if (!callback) {
             return res;
         }
     };

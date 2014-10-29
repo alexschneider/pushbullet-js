@@ -30,11 +30,14 @@ PushBullet.APIKey = "<your api key here>";
 * [PushBullet.push](#pushbulletpush)
 * [PushBullet.pushFile](#pushbulletpushfile)
 * [PushBullet.deletePush](#pushbulletdeletepush)
+* [PushBullet.updatePush](#pushbulletupdatepush)
 * [PushBullet.pushHistory](#pushbulletpushhistory)
 * [PushBullet.devices](#pushbulletdevices)
 * [PushBullet.deleteDevice](#pushbulletdeletedevice)
+* [PushBullet.updateDevice](#pushbulletupdatedevice)
 * [PushBullet.contacts](#pushbulletcontacts)
 * [PushBullet.deleteContact](#pushbulletdeletecontact)
+* [PushBullet.updateContact](#pushbulletupdatecontact)
 * [PushBullet.user](#pushbulletuser)
 
 ----------------------------
@@ -167,10 +170,68 @@ Example return value:
 {}
 ```
 ---
+### PushBullet.updatePush
+`PushBullet.updatePush(pushId, items, dismissed, callback)` - Updates a push given the ID of a push. You can only update dismissed value and items of a push.
+* `pushId` - the ID of the push to be updated. The ID can be found by using [PushBullet.pushHistory](#pushbulletpushhistory) or by storing the result of [PushBullet.push](#pushbulletpush) or [PushBullet.pushFile](#pushbulletpushfile).
+* `items` - Updated version of the items belonging to the push.
+* `dismissed` - Whether the push is dismissed or not.
+* `callback` - Optional callback that expects an `err` and a `res` parameter.
+
+Example for synchronous:
+
+```javascript
+//Update only dismissed state
+var pushId = PushBullet.pushHistory().pushes[0].iden;
+var res = PushBullet.updatePush(pushId, null, true);
+console.log(res);
+//Update the items of the push
+var newItems = [{"checked": true, "text": "MyItem"}];
+var res = PushBullet.updatePush(pushId, newItems, null);
+console.log(res);
+```
+
+Example for asynchronous
+
+```javascript
+PushBullet.pushHistory(function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        var pushId = res.pushes[0].iden;
+        PushBullet.updatePush(pushId, null, true, function(err2, res2) {
+            console.log(res2);
+        });
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    active: true
+    created: 1414615007.3126001
+    dismissed: true
+    iden: "ujxJoYvihTUsjAgl0jaS0tM"
+    modified: 1414618011.7792873
+    receiver_email: "asd@gmail.com"
+    receiver_email_normalized: "asd@gmail.com"
+    receiver_iden: "ujvdRs19NJD2"
+    sender_email: "qwe@gmail.com"
+    sender_email_normalized: "qwe@gmail.com"
+    sender_iden: "ujxJoYviwhTU"
+    sender_name: "Furkan Üzümcü"
+    title: "Neil Patrick Harris and David Burtka on ‘American Horror Story: Freak Show’ | TVLine"
+    type: "link"
+    url: "http://tvline.com/2014/10/29/neil-patrick-harris-david-burtka-american-horror-story-freak-show/"
+}
+```
+
+---
 ### PushBullet.pushHistory
 `PushBullet.pushHistory(callback)` - Retrieves all the pushes that have been made to PushBullet
 * modifiedAfter - Optional parameter for the unixtime lower bound to look for (upper bound being Date.now())
-* Cursor - optional [cursor](https://docs.pushbullet.com/http). Check to see if your response contains the `cursor` key, and if it does, supply this. 
+* Cursor - optional [cursor](https://docs.pushbullet.com/http). Check to see if your response contains the `cursor` key, and if it does, supply this.
 * callback - Optional callback that expects an `err` and a `res` parameter.
 
 Example for synchronous:
@@ -310,6 +371,54 @@ Example return value:
 {}
 ```
 ---
+### PushBullet.updateDevice
+`PushBullet.updateDevice(devId, newNickname, callback)` - Updates a device given its device id.
+* `devId`. The device id can be found using [PushBullet.devices](#pushbulletdevices).
+* `newNickname` - New nickname for the device.
+* `callback` - Optional callback that expects an `err` and a `res` parameter
+
+Example for synchronous:
+
+```javascript
+var devId = PushBullet.devices()[0].iden;
+var res = PushBullet.updateDevice(devId, "HAL");
+console.log(res);
+```
+
+Example for asynchronous:
+
+```javascript
+PushBullet.devices(function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        var devId = res[0].iden;
+        PushBullet.updateDevice(devId, "HAL", function(err2, res2) {
+            if(err2) {
+                throw err2;
+            } else {
+                console.log(res2);
+            }
+        });
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    active: true
+    created: 1410881525.09457
+    iden: "ujxJoYvihTarUsjz7ny6Ruto"
+    kind: "stream"
+    modified: 1414619376.009848
+    nickname: "HAL"
+    pushable: true
+    type: "stream"
+}
+```
+---
 ### PushBullet.contacts
 `PushBullet.contacts(callback)` - Retrieves an array of all contacts
 * `callback` - Optional callback that expects an `err` and a `res` parameter
@@ -355,7 +464,7 @@ Example return value:
 ```
 ---
 ### PushBullet.deleteContact
-`PushBullet.deleteDevice(contId, callback)` - Deletes a device given its device id.
+`PushBullet.deleteDevice(contId, callback)` - Deletes a contact given its contact id.
 * `contId`. The contact id can be found using [PushBullet.contacts](#pushbulletcontacts).
 * `callback` - Optional callback that expects an `err` and a `res` parameter
 
@@ -390,6 +499,54 @@ Example return value:
 
 ```javascript
 {}
+```
+---
+### PushBullet.updateContact
+`PushBullet.updateContact(contID, newName, callback)` - Updates a contact given its contact id.
+* `contId`. The contact id can be found using [PushBullet.contacts](#pushbulletcontacts).
+* `newName`. New name for the contact.
+* `callback` - Optional callback that expects an `err` and a `res` parameter
+
+Example for synchronous:
+
+```javascript
+var contId = PushBullet.contacts()[0].iden;
+var res = PushBullet.updateContact(contId, "Walter White");
+console.log(res);
+```
+
+Example for asynchronous:
+
+```javascript
+PushBullet.contacts(function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        var contId = res[0].iden;
+        PushBullet.updateContact(contId, "Heisenberg",function(err2, res2) {
+            if(err2) {
+                throw err2;
+            } else {
+                console.log(res2);
+            }
+        });
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    active: true
+    created: 1411291632.655659
+    email: "wwhite@gmail.com"
+    email_normalized: "wwhite@gmail.com"
+    iden: "ujxJaoYvihTUsjAhpfBEQLc"
+    modified: 1414618532.7103572
+    name: "Heisenberg"
+    status: "user
+}
 ```
 ---
 ### PushBullet.user
