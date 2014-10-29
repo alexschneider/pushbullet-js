@@ -369,6 +369,54 @@ Example return value:
 {}
 ```
 ---
+### PushBullet.updateDevice
+`PushBullet.updateDevice(devId, newNickname, callback)` - Updates a device given its device id.
+* `devId`. The device id can be found using [PushBullet.devices](#pushbulletdevices).
+* `newNickname` - New nickname for the device.
+* `callback` - Optional callback that expects an `err` and a `res` parameter
+
+Example for synchronous:
+
+```javascript
+var devId = PushBullet.devices()[0].iden;
+var res = PushBullet.updateDevice(devId, "HAL");
+console.log(res);
+```
+
+Example for asynchronous:
+
+```javascript
+PushBullet.devices(function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        var devId = res[0].iden;
+        PushBullet.updateDevice(devId, "HAL", function(err2, res2) {
+            if(err2) {
+                throw err2;
+            } else {
+                console.log(res2);
+            }
+        });
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    active: true
+    created: 1410881525.09457
+    iden: "ujxJoYvihTarUsjz7ny6Ruto"
+    kind: "stream"
+    modified: 1414619376.009848
+    nickname: "HAL"
+    pushable: true
+    type: "stream"
+}
+```
+---
 ### PushBullet.contacts
 `PushBullet.contacts(callback)` - Retrieves an array of all contacts
 * `callback` - Optional callback that expects an `err` and a `res` parameter
