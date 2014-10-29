@@ -183,6 +183,16 @@ var PushBullet = (function() {
         }
     };
 
+    pb.updateDevice = function(devId, newNickname, callback) {
+        var parameters = {
+            nickname: newNickname,
+        };
+        var res = ajaxReq(pbDevice + "/" + devId, "POST", parameters, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
     pb.contacts = function(callback) {
         var res = ajaxReq(pbContact, "GET", null, false, callback);
         if(!callback) {
