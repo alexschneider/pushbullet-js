@@ -34,8 +34,10 @@ PushBullet.APIKey = "<your api key here>";
 * [PushBullet.pushHistory](#pushbulletpushhistory)
 * [PushBullet.devices](#pushbulletdevices)
 * [PushBullet.deleteDevice](#pushbulletdeletedevice)
+* [PushBullet.updateDevice](#pushbulletupdatedevice)
 * [PushBullet.contacts](#pushbulletcontacts)
 * [PushBullet.deleteContact](#pushbulletdeletecontact)
+* [PushBullet.updateContact](#pushbulletupdatecontact)
 * [PushBullet.user](#pushbulletuser)
 
 ----------------------------
