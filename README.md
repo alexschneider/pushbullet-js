@@ -502,7 +502,7 @@ Example return value:
 ```
 ---
 ### PushBullet.updateContact
-`PushBullet.updateDevice(contID, newName, callback)` - Updates a contact given its contact id.
+`PushBullet.updateContact(contID, newName, callback)` - Updates a contact given its contact id.
 * `contId`. The contact id can be found using [PushBullet.contacts](#pushbulletcontacts).
 * `newName`. New name for the contact.
 * `callback` - Optional callback that expects an `err` and a `res` parameter
