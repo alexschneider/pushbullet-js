@@ -134,6 +134,19 @@ var PushBullet = (function() {
         }
     };
 
+    //Update push only works to change dismissed and items.
+    //The items should be in this format [{"checked": true, "text": "MyItem"}]
+    pb.updatePush = function(pushId, items, dismissed, callback) {
+        var parameters = {
+            items : items,
+            dismissed : dismissed
+        };
+        var res = ajaxReq(pbPush + "/" + pushId, "POST", parameters, false, callback);
+        if (!callback) {
+            return res;
+        }
+    };
+
     pb.pushHistory = function(modifiedAfter, cursor, callback) {
         if(typeof modifiedAfter === 'function') {
             callback = modifiedAfter;
