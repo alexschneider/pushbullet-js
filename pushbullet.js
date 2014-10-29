@@ -134,8 +134,6 @@ var PushBullet = (function() {
         }
     };
 
-    //Update push only works to change dismissed and items.
-    //The items should be in this format [{"checked": true, "text": "MyItem"}]
     pb.updatePush = function(pushId, items, dismissed, callback) {
         var parameters = {
             items : items,
