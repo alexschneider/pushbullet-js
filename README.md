@@ -449,6 +449,54 @@ Example return value:
 {}
 ```
 ---
+### PushBullet.updateContact
+`PushBullet.updateDevice(contID, newName, callback)` - Updates a contact given its contact id.
+* `contId`. The contact id can be found using [PushBullet.contacts](#pushbulletcontacts).
+* `newName`. New name for the contact.
+* `callback` - Optional callback that expects an `err` and a `res` parameter
+
+Example for synchronous:
+
+```javascript
+var contId = PushBullet.contacts()[0].iden;
+var res = PushBullet.updateContact(contId, "Walter White");
+console.log(res);
+```
+
+Example for asynchronous:
+
+```javascript
+PushBullet.contacts(function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        var contId = res[0].iden;
+        PushBullet.updateContact(contId, "Heisenberg",function(err2, res2) {
+            if(err2) {
+                throw err2;
+            } else {
+                console.log(res2);
+            }
+        });
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    active: true
+    created: 1411291632.655659
+    email: "wwhite@gmail.com"
+    email_normalized: "wwhite@gmail.com"
+    iden: "ujxJaoYvihTUsjAhpfBEQLc"
+    modified: 1414618532.7103572
+    name: "Heisenberg"
+    status: "user
+}
+```
+---
 ### PushBullet.user
 `PushBullet.user(callback)` - Retrieve information about the current user
 * `callback` - Optional callback that expects an `err` and a `res` parameter
