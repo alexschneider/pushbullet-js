@@ -164,6 +164,17 @@ var PushBullet = (function() {
             return res;
         }
     };
+    
+    pb.createDevice = function(nickname, type, callback) {
+        var parameters = {
+            nickname: nickname,
+            type: type
+        };
+        var res = ajaxReq(pbDevice, "POST", parameters, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
 
     pb.deleteDevice = function(devId, callback) {
         var res = ajaxReq(pbDevice + "/" + devId, "DELETE", null, false, callback);
