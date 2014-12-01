@@ -246,14 +246,26 @@ var PushBullet = (function() {
     };
 
     var handleResponse = function(ajax) {
-        if(ajax.status !== httpResGood && ajax.status !== httpResNoCont) {
-            throw new Error(ajax.status + ": " + ajax.response);
-        }
+        var response;
+
         try {
-            return JSON.parse(ajax.response);
-        } catch(err) {
-            return ajax.response;
+            response = JSON.parse(ajax.response);
         }
+        catch (err) {
+            response = {
+                response: ajax.response
+            };
+        }
+
+        if(ajax.status !== httpResGood) {
+            response.httpStatus = ajax.status;
+
+            if (ajax.status !== httpResNoCont) {
+                throw response;
+            }
+        }
+
+        return response;
     };
 
     return pb;
