@@ -172,6 +172,13 @@ var PushBullet = (function() {
         }
     };
 
+    pb.createDevice = function(dev, callback) {
+        var res = ajaxReq(pbDevice, "POST", dev, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
     pb.contacts = function(callback) {
         var res = ajaxReq(pbContact, "GET", null, false, callback);
         if(!callback) {
