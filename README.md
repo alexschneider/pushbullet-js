@@ -33,6 +33,7 @@ PushBullet.APIKey = "<your api key here>";
 * [PushBullet.pushHistory](#pushbulletpushhistory)
 * [PushBullet.devices](#pushbulletdevices)
 * [PushBullet.deleteDevice](#pushbulletdeletedevice)
+* [PushBullet.createDevice](#pushbulletcreatedevice)
 * [PushBullet.contacts](#pushbulletcontacts)
 * [PushBullet.deleteContact](#pushbulletdeletecontact)
 * [PushBullet.user](#pushbulletuser)
@@ -308,6 +309,47 @@ Example return value:
 
 ```javascript
 {}
+```
+---
+### PushBullet.createDevice
+`PushBullet.createDevice(dev, callback)` - Creates a new device.
+* `dev` - the information of a new device.  Expects a JSONified version of the type parameters [here](https://docs.pushbullet.com/v2/devices).
+* `callback` - Optional callback that expects an `err` and a `res` parameter
+
+Example for synchronous:
+
+```javascript
+var dev = {nickname: '<your device nickname>', type: '<your device stream>'};
+var res = PushBullet.createDevice(dev);
+console.log(res);
+```
+
+Example for asynchronous:
+
+```javascript
+var dev = {nickname: '<your device nickname>', type: '<your device stream>'};
+PushBullet.createDevice(dev, function(err, res) {
+    if(err) {
+        throw err;
+    } else {
+        console.log(res);
+    }
+});
+```
+
+Example return value:
+
+```javascript
+{
+    "active": true,
+    "created": 1431196067.580387,
+    "iden": "juYoChWgSHsjkktADfgroc",
+    "kind": "stream",
+    "modified": 1431196067.580392,
+    "nickname": "HelloWorld",
+    "pushable": true,
+    "type": "stream"
+}
 ```
 ---
 ### PushBullet.contacts
