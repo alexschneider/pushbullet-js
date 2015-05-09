@@ -158,8 +158,8 @@ var PushBullet = (function() {
         }
     };
 
-    pb.devices = function(callback) {
-        var res = ajaxReq(pbDevice, "GET", null, false, callback);
+    pb.devices = function(callback, params) {
+        var res = ajaxReq(pbDevice, "GET", params, false, callback);
         if(!callback) {
             return res;
         }
