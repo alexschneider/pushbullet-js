@@ -134,18 +134,24 @@ var PushBullet = (function() {
         }
     };
 
-    pb.pushHistory = function(modifiedAfter, cursor, callback) {
-        if(typeof modifiedAfter === 'function') {
-            callback = modifiedAfter;
-            modifiedAfter = null;
+    pb.updatePush = function(pushId, params, callback) {
+        var res = ajaxReq(pbPush + "/" + pushId, "POST", params, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
+    pb.pushHistory = function(parameters, cursor, callback) {
+        if(typeof parameters === 'function') {
+            callback = parameters;
+            parameters = null;
         } else if (typeof cursor === 'function') {
             callback = cursor;
             cursor = null;
         }
-        var parameters = null;
-        if(modifiedAfter) {
+        if(typeof parameters !== 'object') {
             parameters = {
-                modified_after: modifiedAfter
+                modified_after: parameters
             };
         }
         if(cursor) {
