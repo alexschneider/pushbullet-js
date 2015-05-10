@@ -134,18 +134,24 @@ var PushBullet = (function() {
         }
     };
 
-    pb.pushHistory = function(modifiedAfter, cursor, callback) {
-        if(typeof modifiedAfter === 'function') {
-            callback = modifiedAfter;
-            modifiedAfter = null;
+    pb.updatePush = function(pushId, params, callback) {
+        var res = ajaxReq(pbPush + "/" + pushId, "POST", params, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
+    pb.pushHistory = function(parameters, cursor, callback) {
+        if(typeof parameters === 'function') {
+            callback = parameters;
+            parameters = null;
         } else if (typeof cursor === 'function') {
             callback = cursor;
             cursor = null;
         }
-        var parameters = null;
-        if(modifiedAfter) {
+        if(typeof parameters !== 'object') {
             parameters = {
-                modified_after: modifiedAfter
+                modified_after: parameters
             };
         }
         if(cursor) {
@@ -158,8 +164,8 @@ var PushBullet = (function() {
         }
     };
 
-    pb.devices = function(callback) {
-        var res = ajaxReq(pbDevice, "GET", null, false, callback);
+    pb.devices = function(callback, params) {
+        var res = ajaxReq(pbDevice, "GET", params, false, callback);
         if(!callback) {
             return res;
         }
@@ -167,6 +173,13 @@ var PushBullet = (function() {
 
     pb.deleteDevice = function(devId, callback) {
         var res = ajaxReq(pbDevice + "/" + devId, "DELETE", null, false, callback);
+        if(!callback) {
+            return res;
+        }
+    };
+
+    pb.createDevice = function(dev, callback) {
+        var res = ajaxReq(pbDevice, "POST", dev, false, callback);
         if(!callback) {
             return res;
         }
